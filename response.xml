@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!--
+
+If you're seeing this, you've clicked on the link
+for Dragon Go Server Quick RSS feed.
+This file is not meant to be read by a web
+browser directly. Instead you're meant to copy
+the URL for the file, which is:
+
+  http://www.dragongoserver.net/rss/status.php
+
+and paste it into your RSS reader or podcast program.
+
+-->
+ <channel>
+  <title><![CDATA[Dragon Go Server - Status of nichus]]></title>
+  <link><![CDATA[http://www.dragongoserver.net/status.php]]></link>
+  <pubDate>Fri, 29 Jan 2010 19:21:56 GMT</pubDate>
+  <ttl>10</ttl>
+  <language>en-us</language>
+  <description><![CDATA[Messages and Games for nichus]]></description>
+  <item>
+   <title><![CDATA[Game with Paul Miller (jettero)]]></title>
+   <link><![CDATA[http://www.dragongoserver.net/game.php?gid=546093]]></link>
+   <guid><![CDATA[http://www.dragongoserver.net/game.php?gid=546093&amp;move=67]]></guid>
+   <category><![CDATA[Status/Game]]></category>
+   <pubDate>Fri, 29 Jan 2010 19:04:04 GMT</pubDate>
+   <description><![CDATA[Game: 546093
+ - Opponent: Paul Miller (jettero)
+ - Color: B
+ - Move: 67]]></description>
+  </item>
+
+ </channel>
+</rss>

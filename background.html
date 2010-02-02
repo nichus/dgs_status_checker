@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <script language="javascript">
+      function getStatus() {
+        req = new XMLHttpRequest();
+        req.open("GET", "http://www.dragongoserver.net/rss/status.php?uid=5419&user=guest", true);
+        req.onload = showStatus;
+        req.send(null);
+      }
+      function formatTime(d) {
+        if (d == null) {
+          d = new Date();
+        }
+        return (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
+      }
+      function displayTooltip(games) {
+        var lastVisit   = "Last Visit: " + formatTime(clicked);
+        var lastUpdate  = "Last Updated: " + formatTime();
+        var tooltip     = "DGS Status: ";
+
+        if (games.length == 0) {
+          tooltip += "No waiting games\n";
+        } else {
+          tooltip += games.length + "\n";
+          for (var i=0,game; game=games[i]; i++) {
+            tooltip += game + "\n";
+          }
+        }
+        if (clicked) {
+          tooltip += lastVisit + "\n";
+        }
+        tooltip += lastUpdate;
+        chrome.browserAction.setTitle({"title": tooltip});
+        chrome.browserAction.setBadgeBackgroundColor({"color": colors.current});
+        chrome.browserAction.setBadgeText({"text": String(games.length)});
+	if (games.length == 0) {
+	  window.setTimeout(function() { chrome.browserAction.setBadgeBackgroundColor({"color": colors.older}); }, 60000);
+          window.setTimeout(function() { chrome.browserAction.setBadgeText({"text": ""}); }, 90000);
+	}
+      }
+      function showStatus() {
+        var response  = req.responseXML;
+        var games     = new Array;
+
+        if (interval == null) {
+          var ttl  = ((response.getElementsByTagName("ttl"))[0]).firstChild.data;
+          interval = window.setInterval(getStatus,parseInt(ttl)*1000*60);
+        }
+
+        var title  = ((response.getElementsByTagName("title"))[1]).firstChild.data;
+        if (title != "Empty lists") {
+          var items = response.getElementsByTagName("item");
+          for (var i = 0, item; item = items[i]; i++) {
+            var ititle  = ((item.getElementsByTagName("title"))[0]).firstChild.data;
+            if (ititle != "Empty lists") {
+              games.push(ititle);
+            }
+          }
+        }
+        displayTooltip(games);
+      }
+
+      var req       = null;
+      var interval  = null;
+      var clicked   = null;
+      var colors    = { "current": [0,0,0,255],
+		        "older":   [100,100,100,100]};
+
+      getStatus();
+
+      chrome.browserAction.onClicked.addListener(function(tab) {
+        chrome.tabs.create({url: "http://www.dragongoserver.net/status.php"});
+        clicked = new Date();
+        displayTooltip([]);
+      });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

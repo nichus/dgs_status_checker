@@ -1,0 +1,101 @@
+<style>
+body {
+  font-size: 10pt;
+  font-family: sans-serif;
+  min-width:357px;
+  overflow-x:hidden;
+  color: black;
+}
+
+img {
+  margin:5px;
+  border:2px solid black;
+  vertical-align:middle;
+  width:75px;
+  height:75px;
+}
+h1 {
+  font-size: 12pt;
+  border-bottom: 1px solid black;
+}
+div.footer, div.debug {
+  font-size: 8pt;
+  border-top: 1px solid black;
+  white-space: pre;
+}
+div.debug {
+  font-size: 6px;
+  font-family: monospace;
+}
+</style>
+
+<script>
+var req = new XMLHttpRequest();
+req.open("GET", "http://www.dragongoserver.net/rss/status.php?uid=5419&user=guest", true);
+req.onload = showStatus;
+req.send(null);
+
+function showStatus() {
+  var response  = req.responseXML;
+  var something = true;
+
+  var title       = ((response.getElementsByTagName("title"))[1]).firstChild.data;
+  if (title == "Empty lists") {
+    something = false;
+  }
+
+  var gameHeader = document.createElement("div");
+  var h1 = document.createElement("h1");
+  h1.appendChild(document.createTextNode("Games"));
+  gameHeader.appendChild(h1);
+
+  if (something) {
+    var items = response.getElementsByTagName("item");
+    for (var i = 0, item; item = items[i]; i++) {
+      var game = displayGame(item);
+      if (game != null) {
+        gameHeader.appendChild(game)
+      }
+    }
+  } else {
+    var div = document.createElement("div");
+    div.appendChild(document.createTextNode("No awaiting games"))
+    gameHeader.appendChild(div);
+  }
+  document.body.appendChild(gameHeader);
+
+  var updated = response.getElementsByTagName("pubDate")[0].textContent;
+  var footer = document.createElement("div");
+  footer.setAttribute("class","footer");
+  footer.appendChild(document.createTextNode("Last Updated: " + updated));
+  document.body.appendChild(footer);
+
+  var debug = document.createElement("div");
+  debug.setAttribute("class","debug");
+  debug.appendChild(document.createTextNode(req.responseText));
+  //document.body.appendChild(debug);
+}
+
+function displayGame(item) {
+  var title       = ((item.getElementsByTagName("title"))[0]).firstChild.data;
+  var link        = ((item.getElementsByTagName("link"))[0]).firstChild.data;
+  var description = ((item.getElementsByTagName("description"))[0]).firstChild.data;
+
+  if (title == "Empty lists") {
+    return null;
+  }
+
+  var category    = ((item.getElementsByTagName("category"))[0]).firstChild.data;
+
+  if (category != "Status/Game") {
+    return null;
+  }
+
+  var div = document.createElement("a");
+  div.appendChild(document.createTextNode(title));
+  div.setAttribute("href",link)
+  return div;
+}
+
+</script>
+

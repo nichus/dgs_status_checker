@@ -33,18 +33,19 @@
         chrome.browserAction.setTitle({"title": tooltip});
         chrome.browserAction.setBadgeBackgroundColor({"color": colors.current});
         chrome.browserAction.setBadgeText({"text": String(games.length)});
-	if (games.length == 0) {
-	  window.setTimeout(function() { chrome.browserAction.setBadgeBackgroundColor({"color": colors.older}); }, 60000);
+        if (games.length == 0) {
+          window.setTimeout(function() { chrome.browserAction.setBadgeBackgroundColor({"color": colors.older}); }, 60000);
           window.setTimeout(function() { chrome.browserAction.setBadgeText({"text": ""}); }, 90000);
-	}
+        }
       }
       function showStatus() {
         var response  = req.responseXML;
         var games     = new Array;
 
         if (interval == null) {
-          var ttl  = ((response.getElementsByTagName("ttl"))[0]).firstChild.data;
-          interval = window.setInterval(getStatus,parseInt(ttl)*1000*60);
+          var ttl   = ((response.getElementsByTagName("ttl"))[0]).firstChild.data;
+          delay     = parseInt(ttl)*1000*60;
+          resetInterval();
         }
 
         var title  = ((response.getElementsByTagName("title"))[1]).firstChild.data;
@@ -59,18 +60,26 @@
         }
         displayTooltip(games);
       }
+      function resetInterval() {
+        if (interval) {
+          window.clearInterval(interval);
+        }
+        interval = window.setInterval(getStatus,delay);
+      }
 
       var req       = null;
       var interval  = null;
+      var delay     = null;
       var clicked   = null;
       var colors    = { "current": [0,0,0,255],
-		        "older":   [100,100,100,100]};
+                        "older":   [100,100,100,100]};
 
       getStatus();
 
       chrome.browserAction.onClicked.addListener(function(tab) {
         chrome.tabs.create({url: "http://www.dragongoserver.net/status.php"});
         clicked = new Date();
+        window.clearInterval(interval);
         displayTooltip([]);
       });
     </script>

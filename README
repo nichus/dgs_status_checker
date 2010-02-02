@@ -1,1 +1,5 @@
 A first stab at a very simple chrome extension that will save me one open tab, except when needed
+
+TODO
+-----
+ * Make the zero games waiting notification fade more gracefully, rather than a two step fade.  Something like a 255/120s fade.

@@ -61,7 +61,7 @@
         displayTooltip(games);
       }
       function resetInterval() {
-        if (interval) {
+        if (interval != null) {
           window.clearInterval(interval);
         }
         interval = window.setInterval(getStatus,delay);
@@ -79,7 +79,7 @@
       chrome.browserAction.onClicked.addListener(function(tab) {
         chrome.tabs.create({url: "http://www.dragongoserver.net/status.php"});
         clicked = new Date();
-        window.clearInterval(interval);
+        resetInterval();
         displayTooltip([]);
       });
     </script>

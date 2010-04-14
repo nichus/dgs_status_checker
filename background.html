@@ -1,6 +1,7 @@
 <html>
   <head>
     <script language="javascript">
+      var throttle = 2;
       function getStatus() {
         req = new XMLHttpRequest();
         req.open("GET", "http://www.dragongoserver.net/rss/status.php?uid=5419&user=guest", true);
@@ -44,7 +45,7 @@
 
         if (interval == null) {
           var ttl   = ((response.getElementsByTagName("ttl"))[0]).firstChild.data;
-          delay     = parseInt(ttl)*1000*60;
+          delay     = parseInt(ttl)*1000*60*throttle;
           resetInterval();
         }
 
